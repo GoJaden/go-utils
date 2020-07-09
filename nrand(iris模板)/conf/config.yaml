@@ -1,0 +1,18 @@
+version: v1.0
+author: lhlyu
+name: nrand
+env: prod
+
+jwt:
+  secret: 3.14159265358979323
+  itv: 86400 # jwt有效时长，单位秒
+
+server:
+  host: localhost
+  port: 8080
+  limit: 15   # 每秒最多允许N个请求
+
+log:
+  level: debug
+  out: log/libra.log
+
