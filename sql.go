@@ -3,6 +3,7 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"sdyxmall/business-examine/wrapper/page"
 	"strings"
 )
@@ -43,4 +44,20 @@ func ConvertToSQLParams(sliceData interface{}, rawSqlParams []interface{}) (plac
 	}
 	params = rawSqlParams
 	return
+}
+
+//获取指定类型的 键值
+func getColumnInfo(ptr interface{}) (columnNames []string, columnValues []interface{}) {
+	columnNames = make([]string, 0)
+	columnValues = make([]interface{}, 0)
+	t := reflect.TypeOf(ptr).Elem()
+	v := reflect.ValueOf(ptr).Elem()
+	numField := t.NumField()
+	for i := 0; i < numField; i++ {
+		if columnName, got := t.Field(i).Tag.Lookup("db"); got {
+			columnNames = append(columnNames, columnName)
+			columnValues = append(columnValues, v.Field(i).Interface())
+		}
+	}
+	return columnNames, columnValues
 }
